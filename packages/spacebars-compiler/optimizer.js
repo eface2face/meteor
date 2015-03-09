@@ -179,7 +179,7 @@ RawReplacingVisitor.def({
 });
 
 SpacebarsCompiler.optimize = function (tree) {
-  tree = (new OptimizingVisitor).visit(tree);
+  //tree = (new OptimizingVisitor).visit(tree);
   tree = (new RawCompactingVisitor).visit(tree);
   tree = (new RawReplacingVisitor).visit(tree);
   return tree;
