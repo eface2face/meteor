@@ -372,6 +372,7 @@ function doRunCommand (options) {
   //
   // NOTE: this calls process.exit() when testing is done.
   if (options['test']){
+    options.once = true;
     var serverUrl = "http://" + (parsedUrl.host || "localhost") +
           ":" + parsedUrl.port;
     var velocity = require('./run-velocity.js');
@@ -2016,6 +2017,52 @@ main.registerCommand({
   maybeLog("Removing sshkey at " + idpath);
   files.unlink(idpath);
   return sshEnd;
+});
+
+
+///////////////////////////////////////////////////////////////////////////////
+// admin progressbar-test
+///////////////////////////////////////////////////////////////////////////////
+
+// A test command to print a progressbar. Useful for manual testing.
+main.registerCommand({
+  name: 'admin progressbar-test',
+  options: {
+    secs: { type: Number, default: 20 },
+    spinner: { type: Boolean, default: false }
+  },
+  hidden: true,
+  catalogRefresh: new catalog.Refresh.Never()
+}, function (options) {
+  buildmessage.enterJob({ title: "A test progressbar" }, function () {
+    var doneFuture = new Future;
+    var progress = buildmessage.getCurrentProgressTracker();
+    var totalProgress = { current: 0, end: options.secs, done: false };
+    var i = 0;
+    var n = options.secs;
+
+    if (options.spinner) {
+      totalProgress.end = undefined;
+    }
+
+    var updateProgress = function () {
+      i++;
+      if (! options.spinner) {
+        totalProgress.current = i;
+      }
+
+      if (i === n) {
+        totalProgress.done = true;
+        progress.reportProgress(totalProgress);
+        doneFuture.return();
+      } else {
+        progress.reportProgress(totalProgress);
+        setTimeout(updateProgress, 1000);
+      }
+    };
+    setTimeout(updateProgress);
+    doneFuture.wait();
+  });
 });
 
 

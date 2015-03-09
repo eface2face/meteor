@@ -264,7 +264,7 @@ files.statOrNull = function (path) {
 files.rm_recursive = Profile("files.rm_recursive", function (p) {
   if (Fiber.current && Fiber.yield && ! Fiber.yield.disallowed) {
     var fut = new Future();
-    rimraf(files.convertToOSPath(p), { busyTries: 10 }, fut.resolver());
+    rimraf(files.convertToOSPath(p), fut.resolver());
     fut.wait();
   } else {
     rimraf.sync(files.convertToOSPath(p));
@@ -1161,11 +1161,11 @@ _.extend(files.KeyValueFile.prototype, {
 
 files.getHomeDir = function () {
   if (process.platform === "win32") {
-    var homeDir = process.env.LOCALAPPDATA || process.env.APPDATA;
-    return files.convertToStandardPath(homeDir);
+    return files.pathDirname(
+      files.convertToStandardPath(process.env.METEOR_INSTALLATION));
+  } else {
+    return process.env.HOME;
   }
-
-  return process.env.HOME;
 };
 
 // add .bat extension to link file if not present
@@ -1185,9 +1185,13 @@ files._generateScriptLinkToMeteorScript = function (scriptLocation) {
 
   var newScript = [
     "@echo off",
+    "SETLOCAL",
+    "SET METEOR_INSTALLATION=%~dp0%",
+
     // always convert to Windows path since this function can also be
     // called on Linux or Mac when we are building bootstrap tarballs
     "\"" + scriptLocationConverted + "\" %*",
+    "ENDLOCAL",
     // add a comment with the destination of the link, so it can be read later
     // by files.readLinkToMeteorScript
     "rem " + scriptLocationConverted,

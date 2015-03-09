@@ -294,7 +294,7 @@ DocsData = {
   },
   "Accounts.onLogin": {
     "kind": "function",
-    "locus": "Server",
+    "locus": "Anywhere",
     "longname": "Accounts.onLogin",
     "memberof": "Accounts",
     "name": "onLogin",
@@ -315,7 +315,7 @@ DocsData = {
   },
   "Accounts.onLoginFailure": {
     "kind": "function",
-    "locus": "Server",
+    "locus": "Anywhere",
     "longname": "Accounts.onLoginFailure",
     "memberof": "Accounts",
     "name": "onLoginFailure",
@@ -1211,7 +1211,7 @@ DocsData = {
         }
       },
       {
-        "description": "<p>Optional. May include <code>onError</code> and\n<code>onReady</code> callbacks. If a function is passed instead of an object, it is\ninterpreted as an <code>onReady</code> callback.</p>",
+        "description": "<p>Optional. May include <code>onStop</code> and\n<code>onReady</code> callbacks. If a function is passed instead of an object, it is\ninterpreted as an <code>onReady</code> callback.</p>",
         "name": "callbacks",
         "optional": true,
         "type": {
@@ -2437,7 +2437,7 @@ DocsData = {
         }
       },
       {
-        "description": "<p>Mail body (in plain text or HTML)</p>",
+        "description": "<p>Mail body (in plain text and/or HTML)</p>",
         "name": "text, html",
         "optional": true,
         "type": {
@@ -2546,6 +2546,15 @@ DocsData = {
         "type": {
           "names": [
             "Boolean"
+          ]
+        }
+      },
+      {
+        "description": "<p>On the server, <code>HTTP.call</code> is implemented by using the <a href=\"https://www.npmjs.com/package/request\">npm <code>request</code> module</a>. Any options in this object will be passed directly to the <code>request</code> invocation.</p>",
+        "name": "npmRequestOptions",
+        "type": {
+          "names": [
+            "Object"
           ]
         }
       }
@@ -4523,7 +4532,7 @@ DocsData = {
     "options": [],
     "params": [
       {
-        "description": "<p>A function that takes in the package control 'api' object, which keeps track of dependencies and exports.</p>",
+        "description": "<p>A function that takes in the package control <code>api</code> object, which keeps track of dependencies and exports.</p>",
         "name": "func",
         "type": {
           "names": [
@@ -4602,7 +4611,7 @@ DocsData = {
     "options": [],
     "params": [],
     "scope": "global",
-    "summary": "The API object passed into the Packages.onUse function."
+    "summary": "Type of the API object passed into the `Package.onUse` function."
   },
   "PackageAPI#addFiles": {
     "kind": "function",
@@ -4888,7 +4897,7 @@ DocsData = {
         }
       },
       {
-        "description": "<p>The value to test against</p>",
+        "description": "<p>The value to\ntest against</p>",
         "name": "value",
         "type": {
           "names": [
@@ -4902,7 +4911,7 @@ DocsData = {
       }
     ],
     "scope": "static",
-    "summary": "Test if a session variable is equal to a value. If inside a [reactive computation](#reactivity), invalidate the computation the next time the variable changes to or from the value."
+    "summary": "Test if a session variable is equal to a value. If inside a\n[reactive computation](#reactivity), invalidate the computation the next\ntime the variable changes to or from the value."
   },
   "Session.get": {
     "kind": "function",
@@ -4923,7 +4932,7 @@ DocsData = {
       }
     ],
     "scope": "static",
-    "summary": "Get the value of a session variable. If inside a [reactive computation](#reactivity), invalidate the computation the next time the value of the variable is changed by [`Session.set`](#session_set). This returns a clone of the session value, so if it's an object or an array, mutating the returned value has no effect on the value stored in the session."
+    "summary": "Get the value of a session variable. If inside a [reactive\ncomputation](#reactivity), invalidate the computation the next time the\nvalue of the variable is changed by [`Session.set`](#session_set). This\nreturns a clone of the session value, so if it's an object or an array,\nmutating the returned value has no effect on the value stored in the\nsession."
   },
   "Session.set": {
     "kind": "function",
@@ -4954,7 +4963,7 @@ DocsData = {
       }
     ],
     "scope": "static",
-    "summary": "Set a variable in the session. Notify any listeners that the value has changed (eg: redraw templates, and rerun any [`Tracker.autorun`](#tracker_autorun) computations, that called [`Session.get`](#session_get) on this `key`.)"
+    "summary": "Set a variable in the session. Notify any listeners that the value\nhas changed (eg: redraw templates, and rerun any\n[`Tracker.autorun`](#tracker_autorun) computations, that called\n[`Session.get`](#session_get) on this `key`.)"
   },
   "Session.setDefault": {
     "kind": "function",
@@ -4985,7 +4994,7 @@ DocsData = {
       }
     ],
     "scope": "static",
-    "summary": "Set a variable in the session if it hasn't been set before. Otherwise works exactly the same as [`Session.set`](#session_set)."
+    "summary": "Set a variable in the session if it hasn't been set before.\nOtherwise works exactly the same as [`Session.set`](#session_set)."
   },
   "Subscription": {
     "instancename": "this",
@@ -5102,7 +5111,7 @@ DocsData = {
       }
     ],
     "scope": "instance",
-    "summary": "Call inside the publish function.  Stops this client's subscription, triggering a call on the client to the `onError` callback passed to [`Meteor.subscribe`](#meteor_subscribe), if any. If `error` is not a [`Meteor.Error`](#meteor_error), it will be [sanitized](#meteor_error)."
+    "summary": "Call inside the publish function.  Stops this client's subscription, triggering a call on the client to the `onStop` callback passed to [`Meteor.subscribe`](#meteor_subscribe), if any. If `error` is not a [`Meteor.Error`](#meteor_error), it will be [sanitized](#meteor_error)."
   },
   "Subscription#onStop": {
     "kind": "function",
@@ -5175,7 +5184,7 @@ DocsData = {
     "options": [],
     "params": [],
     "scope": "instance",
-    "summary": "Call inside the publish function.  Stops this client's subscription; the `onError` callback is *not* invoked on the client."
+    "summary": "Call inside the publish function.  Stops this client's subscription and invokes the client's `onStop` callback with no error."
   },
   "Subscription#userId": {
     "kind": "member",
@@ -5335,7 +5344,7 @@ DocsData = {
     "memberof": "Template",
     "name": "body",
     "scope": "static",
-    "summary": "The [template object](#templates_api) representing your `<body>` tag."
+    "summary": "The [template object](#templates_api) representing your `<body>`\ntag."
   },
   "Template.currentData": {
     "kind": "function",
