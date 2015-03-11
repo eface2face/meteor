@@ -1,5 +1,23 @@
 ## v.NEXT
 
+### Tracker
+
+* Schedule the flush cycle using a better technique than `setTimeout` when
+  available.  #3889
+
+
+### `meteor` command-line tool
+
+* Don't fail if `npm` prints more than 200K.  #3887
+
+
+### Other bug fixes and improvements
+
+* Upgraded dependencies:
+
+  - uglify-js: 2.4.17 (from 2.4.13)
+
+
 ## v1.0.4, 2015-Mar-??
 
 ### Mongo Driver and Livequery
